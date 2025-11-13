@@ -37,7 +37,7 @@ const MovieDetails = () => {
   // Handle Edit
   const handleEdit = () => {
     // Navigate to edit page (you can create `/edit/:id` later)
-    navigate(`/edit/${encodeURIComponent(movie.title)}`, { state: { movie } });
+    navigate(`/updateMovie/${movie._id}`, { state: { movie } });
   };
 
   return (

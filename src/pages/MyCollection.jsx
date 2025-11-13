@@ -44,7 +44,7 @@ const MyCollection = () => {
 
   const handleEdit = (movie) => {
     const id = movie._id ? encodeURIComponent(String(movie._id)) : encodeURIComponent(movie.title);
-    navigate(`/edit/${id}`, { state: { movie } });
+    navigate(`/updateMovie/${id}`, { state: { movie } });
   };
 
   const handleDelete = (identifier) => {

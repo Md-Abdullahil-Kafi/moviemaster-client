@@ -23,8 +23,8 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <Layout></Layout>,
-    id: "movies-root", // 👈 এই id টা খুব দরকারি
-    loader: moviesLoader, // 👈 এখানে সব movie data আসবে
+    id: "movies-root", 
+    loader: moviesLoader,
     children: [
         {
             index: true,
@@ -54,7 +54,7 @@ const router = createBrowserRouter([
             
         },
         {
-            path:"/edit/:title",
+            path:"/updateMovie/:id",
             element: <PrivetRoute><UpdateMovie></UpdateMovie></PrivetRoute>
         },
         {
