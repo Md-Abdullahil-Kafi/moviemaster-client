@@ -1,21 +1,17 @@
-import  { useContext } from "react";
-import { useLoaderData, useNavigate} from "react-router";
+import { useContext } from "react";
+import { useLoaderData, useNavigate } from "react-router";
 import { motion } from "framer-motion";
 import { FaArrowLeft, FaStar, FaEdit, FaTrash } from "react-icons/fa";
-// import { toast } from "react-hot-toast"; 
 import { AuthContext } from "./providers/AuthProvider";
-
+import swal from "sweetalert2";
 
 const MovieDetails = () => {
-  // const { state } = useLocation();
   const navigate = useNavigate();
-  const {user}=useContext(AuthContext);
-  // const movie = state?.movie; 
+  const { user } = useContext(AuthContext);
   const data = useLoaderData();
-  const movie = data.result
+  const movie = data?.result;
 
-  // Example logged-in user (you can replace with your actual auth context)
-  const loggedInUserEmail = user.email;
+  const loggedInUserEmail = user?.email;
 
   if (!movie)
     return (
@@ -24,19 +20,51 @@ const MovieDetails = () => {
       </div>
     );
 
-  // Check ownership
   const isOwner = movie.addedBy === loggedInUserEmail;
 
-  // Handle Delete
-  const handleDelete = () => {
-    // Here you’d normally call your API to delete the movie
-    toast.success(`${movie.title} deleted successfully!`);
-    navigate("/");
+  // safer delete
+  const handleDelete = async () => {
+    const confirmed = await swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, delete it!",
+    });
+
+    if (!confirmed.isConfirmed) return;
+
+    try {
+      const res = await fetch(`http://localhost:3000/allMovies/${encodeURIComponent(movie._id)}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      // If server returns non-2xx, try to parse JSON else text
+      if (!res.ok) {
+        let errBody;
+        try {
+          errBody = await res.json();
+          throw new Error(errBody.message || JSON.stringify(errBody));
+        } catch (jsonErr) {
+          // couldn't parse JSON, try text
+          const txt = await res.text();
+          throw new Error(txt || `Request failed with status ${res.status}`);
+        }
+      }
+
+      const result = await res.json(); // should be valid JSON on success
+      await swal.fire("Deleted!", "The movie has been deleted.", "success");
+      navigate("/myCollection");
+    } catch (err) {
+      console.error("Delete failed:", err);
+      swal.fire("Error", "Delete failed: " + (err.message || "Server error"), "error");
+    }
   };
 
-  // Handle Edit
   const handleEdit = () => {
-    // Navigate to edit page (you can create `/edit/:id` later)
     navigate(`/updateMovie/${movie._id}`, { state: { movie } });
   };
 
@@ -48,17 +76,11 @@ const MovieDetails = () => {
         className="max-w-5xl w-full bg-base-200 rounded-2xl shadow-xl overflow-hidden"
       >
         <div className="flex flex-col md:flex-row">
-          <img
-            src={movie.posterUrl}
-            alt={movie.title}
-            className="w-full md:w-1/3 object-cover"
-          />
+          <img src={movie.posterUrl} alt={movie.title} className="w-full md:w-1/3 object-cover" />
 
           <div className="p-6 flex flex-col justify-between flex-1">
             <div>
-              <h1 className="text-3xl font-bold mb-2 text-primary">
-                {movie.title}
-              </h1>
+              <h1 className="text-3xl font-bold mb-2 text-primary">{movie.title}</h1>
 
               <div className="flex items-center gap-2 text-yellow-400 mb-3">
                 <FaStar /> <span>{movie.rating}</span>
@@ -98,27 +120,17 @@ const MovieDetails = () => {
               </div>
             </div>
 
-            {/* Buttons */}
             <div className="flex items-center justify-between mt-6">
-              <button
-                onClick={() => navigate(-1)}
-                className="btn btn-outline btn-primary flex items-center gap-2"
-              >
+              <button onClick={() => navigate(-1)} className="btn btn-outline btn-primary flex items-center gap-2">
                 <FaArrowLeft /> Back
               </button>
 
               {isOwner && (
                 <div className="flex gap-3">
-                  <button
-                    onClick={handleEdit}
-                    className="btn btn-warning flex items-center gap-2"
-                  >
+                  <button onClick={handleEdit} className="btn btn-warning flex items-center gap-2">
                     <FaEdit /> Edit
                   </button>
-                  <button
-                    onClick={handleDelete}
-                    className="btn btn-error flex items-center gap-2"
-                  >
+                  <button onClick={handleDelete} className="btn btn-error flex items-center gap-2">
                     <FaTrash /> Delete
                   </button>
                 </div>
