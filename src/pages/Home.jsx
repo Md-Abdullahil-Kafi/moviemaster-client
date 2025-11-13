@@ -69,19 +69,19 @@ const Home = () => {
 
       {/*  STATS SECTION */}
       <motion.section
-        className="flex justify-center gap-8 text-center"
+        className="flex justify-center gap-16 text-center"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         transition={{ duration: 0.6 }}
       >
         <div>
-          <h3 className="text-4xl font-bold text-primary">
+          <h3 className="text-7xl font-bold text-primary">
             {stats.totalMovies}
           </h3>
           <p className="text-gray-500">Total Movies</p>
         </div>
         <div>
-          <h3 className="text-4xl font-bold text-secondary">
+          <h3 className="text-7xl font-bold text-secondary">
             {stats.totalUsers}
           </h3>
           <p className="text-gray-500">Total Users</p>
@@ -90,16 +90,16 @@ const Home = () => {
 
       {/*  TOP RATED MOVIES */}
       <Container>
-        <section className="px-6">
+        <section className="px-6 ">
         <h2 className="text-3xl font-bold mb-6">Top Rated Movies</h2>
-        <div className="grid md:grid-cols-5 gap-6">
+        <div className="grid md:grid-cols-3 gap-6">
           {topRated.map((movie) => (
             <motion.div
               key={movie.id ?? movie._id}
-              className="card bg-base-200 shadow-lg"
+              className="card bg-base-200 shadow-lg rounded-xl overflow-hidden"
               whileHover={{ scale: 1.05 }}
             >
-              <Link to={`/movies/${encodeURIComponent(movie.title)}`}>
+              <Link to={`/movies/${movie._id}`}>
                 <figure>
                   <img
                     src={movie.posterUrl}
@@ -162,7 +162,7 @@ const Home = () => {
                 whileHover={{ scale: 1.02 }}
               >
                 <Link
-                  to={`/movies/${encodeURIComponent(movie.title)}`}
+                  to={`/movies/${movie._id}`}
                   className="flex flex-col h-full"
                 >
                   <div className="h-60 overflow-hidden">

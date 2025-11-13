@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
+import { AuthContext } from "./providers/AuthProvider";
 
 const UpdateMovie = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
   const movieData = state?.movie;
+  const {user} = useContext(AuthContext);
   
   if (!movieData) {
     return (
@@ -21,11 +23,12 @@ const UpdateMovie = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+
+
 const handleUpdate = async (e) => {
   e.preventDefault();
 
   try {
-    // prepare payload but DON'T send _id in body
     const payload = { ...formData };
     const id = payload._id ? String(payload._id) : null;
     if (payload._id) delete payload._id;
@@ -35,15 +38,18 @@ const handleUpdate = async (e) => {
       return;
     }
 
-    const res = await fetch(`http://localhost:3000/movies/update/${encodeURIComponent(id)}`, {
+    const token = await user.getIdToken(); 
+
+    const res = await fetch(`http://localhost:3000/movies/update/${id}`, {
       method: "PUT",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`, 
+      },
       body: JSON.stringify(payload),
     });
 
-    // better error handling:
     if (!res.ok) {
-      // try to parse json error, otherwise get text
       let errText;
       try {
         const errJson = await res.json();
@@ -62,6 +68,10 @@ const handleUpdate = async (e) => {
     toast.error("Update failed: " + (err.message || "Server error"));
   }
 };
+
+
+
+
   return (
     <div className="min-h-screen bg-base-300 text-base-content flex justify-center items-center p-6">
       <motion.div

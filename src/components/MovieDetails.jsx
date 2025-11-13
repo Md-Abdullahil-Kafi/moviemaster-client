@@ -1,15 +1,46 @@
-import { useContext } from "react";
-import { useLoaderData, useNavigate } from "react-router";
+import { useContext, useEffect, useState } from "react";
+import { useLoaderData, useNavigate, useParams } from "react-router";
 import { motion } from "framer-motion";
 import { FaArrowLeft, FaStar, FaEdit, FaTrash } from "react-icons/fa";
 import { AuthContext } from "./providers/AuthProvider";
 import swal from "sweetalert2";
 
+
+
+
 const MovieDetails = () => {
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
-  const data = useLoaderData();
-  const movie = data?.result;
+  const {setLoading} = useContext(AuthContext);
+  const [movie, setMovie] = useState({});
+  const {id} = useParams();
+  
+  useEffect(() => {
+  const fetchMovie = async () => {
+    try {
+      const token = await user.getIdToken(); 
+      const res = await fetch(`http://localhost:3000/movies/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`, 
+        },
+      });
+
+      if (!res.ok) {
+        const text = await res.text();
+        console.error("Server error:", text);
+        return;
+      }
+
+      const data = await res.json();
+      setMovie(data.result);
+      setLoading(false);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  fetchMovie();
+}, [id, user]);
 
   const loggedInUserEmail = user?.email;
 
@@ -22,48 +53,55 @@ const MovieDetails = () => {
 
   const isOwner = movie.addedBy === loggedInUserEmail;
 
+
+  
+
   // safer delete
   const handleDelete = async () => {
-    const confirmed = await swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "Yes, delete it!",
-    });
+  const confirmed = await swal.fire({
+    title: "Are you sure?",
+    text: "You won't be able to revert this!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "Yes, delete it!",
+  });
 
-    if (!confirmed.isConfirmed) return;
+  if (!confirmed.isConfirmed) return;
 
-    try {
-      const res = await fetch(`http://localhost:3000/movies/${encodeURIComponent(movie._id)}`, {
+  try {
+    const token = await user.getIdToken(); // Firebase ID token
+
+    const res = await fetch(
+      `http://localhost:3000/movies/${movie._id}`,
+      {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, 
         },
-      });
-
-      // If server returns non-2xx, try to parse JSON else text
-      if (!res.ok) {
-        let errBody;
-        try {
-          errBody = await res.json();
-          throw new Error(errBody.message || JSON.stringify(errBody));
-        } catch (jsonErr) {
-          // couldn't parse JSON, try text
-          const txt = await res.text();
-          throw new Error(txt || `Request failed with status ${res.status}`);
-        }
       }
+    );
 
-      const result = await res.json(); // should be valid JSON on success
-      await swal.fire("Deleted!", "The movie has been deleted.", "success");
-      navigate("/myCollection");
-    } 
-    catch (err) {
-      console.error("Delete failed:", err);
-      swal.fire("Error", "Delete failed: " + (err.message || "Server error"), "error");
+    if (!res.ok) {
+      let errBody;
+      try {
+        errBody = await res.json();
+        throw new Error(errBody.message || JSON.stringify(errBody));
+      } catch (jsonErr) {
+        const txt = await res.text();
+        throw new Error(txt || `Request failed with status ${res.status}`);
+      }
     }
-  };
+
+    const result = await res.json();
+    await swal.fire("Deleted!", "The movie has been deleted.", "success");
+    navigate("/myCollection");
+  } catch (err) {
+    console.error("Delete failed:", err);
+    swal.fire("Error", "Delete failed: " + (err.message || "Server error"), "error");
+  }
+};
+
 
   const handleEdit = () => {
     navigate(`/updateMovie/${movie._id}`, { state: { movie } });

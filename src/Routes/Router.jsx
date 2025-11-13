@@ -38,7 +38,6 @@ const router = createBrowserRouter([
         {
             path: "/myCollection",
             element: <PrivetRoute><MyCollection></MyCollection></PrivetRoute>,
-            loader: ()=>fetch('http://localhost:3000/latest-movie'),
         },
         {
             path: "/login",
@@ -51,7 +50,6 @@ const router = createBrowserRouter([
         {
             path: "/movies/:id",
             element: <PrivetRoute><MovieDetails></MovieDetails></PrivetRoute>,
-            loader: ({params})=> fetch(`http://localhost:3000/movies/${params.id}`)
             
         },
         {

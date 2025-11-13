@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router";
+import Container from "../Container";
 
 const RecentlyAdded = ()=> {
   const [movies, setMovies] = useState([]);
@@ -17,7 +18,7 @@ const RecentlyAdded = ()=> {
         console.error("Error fetching latest movies:", err);
         setLoading(false);
       });
-  }, []); // Empty dependency means it runs once on mount
+  }, []); 
 
   if (loading) return <p className="text-center mt-6 text-gray-400">Loading...</p>;
 
@@ -28,7 +29,7 @@ const RecentlyAdded = ()=> {
       {movies.length === 0 ? (
         <p className="text-gray-400">No movies found</p>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {movies.map((movie) => (
             <motion.div
               key={movie.id ?? movie._id}

@@ -167,6 +167,7 @@ const AuthProviders = ({ children }) => {
     loginWithGoogle,
     updateUserProfile,
     logoutUser,
+    setLoading
   };
 
   return (
