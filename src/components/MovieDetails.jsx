@@ -1,0 +1,132 @@
+import React, { useContext } from "react";
+import { useLocation, useNavigate } from "react-router";
+import { motion } from "framer-motion";
+import { FaArrowLeft, FaStar, FaEdit, FaTrash } from "react-icons/fa";
+import { toast } from "react-hot-toast"; // optional if you use react-hot-toast
+import { AuthContext } from "./providers/AuthProvider";
+
+
+const MovieDetails = () => {
+  const { state } = useLocation();
+  const navigate = useNavigate();
+  const {user}=useContext(AuthContext)
+  const movie = state?.movie;
+
+  // Example logged-in user (you can replace with your actual auth context)
+  const loggedInUserEmail = user.email;
+
+  if (!movie)
+    return (
+      <div className="min-h-screen bg-base-300 text-gray-400 flex items-center justify-center">
+        <p>Movie not found!</p>
+      </div>
+    );
+
+  // Check ownership
+  const isOwner = movie.addedBy === loggedInUserEmail;
+
+  // Handle Delete
+  const handleDelete = () => {
+    // Here you’d normally call your API to delete the movie
+    toast.success(`${movie.title} deleted successfully!`);
+    navigate("/");
+  };
+
+  // Handle Edit
+  const handleEdit = () => {
+    // Navigate to edit page (you can create `/edit/:id` later)
+    navigate(`/edit/${encodeURIComponent(movie.title)}`, { state: { movie } });
+  };
+
+  return (
+    <div className="min-h-screen bg-base-300 text-gray-100 p-6 flex justify-center items-center">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="max-w-5xl w-full bg-base-200 rounded-2xl shadow-xl overflow-hidden"
+      >
+        <div className="flex flex-col md:flex-row">
+          <img
+            src={movie.posterUrl}
+            alt={movie.title}
+            className="w-full md:w-1/3 object-cover"
+          />
+
+          <div className="p-6 flex flex-col justify-between flex-1">
+            <div>
+              <h1 className="text-3xl font-bold mb-2 text-primary">
+                {movie.title}
+              </h1>
+
+              <div className="flex items-center gap-2 text-yellow-400 mb-3">
+                <FaStar /> <span>{movie.rating}</span>
+              </div>
+
+              <p className="text-gray-400 mb-2">
+                <strong>Genre:</strong> {movie.genre}
+              </p>
+              <p className="text-gray-400 mb-2">
+                <strong>Release Year:</strong> {movie.releaseYear}
+              </p>
+              <p className="text-gray-400 mb-2">
+                <strong>Duration:</strong> {movie.duration} min
+              </p>
+              <p className="text-gray-400 mb-2">
+                <strong>Language:</strong> {movie.language}
+              </p>
+              <p className="text-gray-400 mb-2">
+                <strong>Country:</strong> {movie.country}
+              </p>
+              <p className="text-gray-400 mb-2">
+                <strong>Director:</strong> {movie.director}
+              </p>
+              <p className="text-gray-400 mb-2">
+                <strong>Cast:</strong> {movie.cast}
+              </p>
+
+              <div className="mt-4">
+                <strong className="text-gray-300">Plot Summary:</strong>
+                <p className="text-gray-400 mt-1">{movie.plotSummary}</p>
+              </div>
+
+              <div className="mt-4 text-sm text-gray-500">
+                <p>
+                  <strong>Added By:</strong> {movie.addedBy}
+                </p>
+              </div>
+            </div>
+
+            {/* Buttons */}
+            <div className="flex items-center justify-between mt-6">
+              <button
+                onClick={() => navigate(-1)}
+                className="btn btn-outline btn-primary flex items-center gap-2"
+              >
+                <FaArrowLeft /> Back
+              </button>
+
+              {isOwner && (
+                <div className="flex gap-3">
+                  <button
+                    onClick={handleEdit}
+                    className="btn btn-warning flex items-center gap-2"
+                  >
+                    <FaEdit /> Edit
+                  </button>
+                  <button
+                    onClick={handleDelete}
+                    className="btn btn-error flex items-center gap-2"
+                  >
+                    <FaTrash /> Delete
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </motion.div>
+    </div>
+  );
+};
+
+export default MovieDetails;

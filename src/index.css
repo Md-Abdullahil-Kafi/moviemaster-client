@@ -1,0 +1,15 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
+
+body {
+  background: radial-gradient(circle at center, #000000 0%, #140028 100%);
+  color: white;
+}
+
+
+.gradient-text {
+  background: linear-gradient(90deg, #ffb347, #ff00cc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
