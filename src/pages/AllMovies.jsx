@@ -1,12 +1,11 @@
-import React, { useContext } from "react";
 import { motion } from "framer-motion";
-import { Link, useRouteLoaderData } from "react-router";
+import { Link, useLoaderData} from "react-router";
 import { FaStar } from "react-icons/fa";
 
 
 
 const AllMovies = () => {
-  const data = useRouteLoaderData("movies-root");
+  const data = useLoaderData();
   
   return (
     <div className="min-h-screen bg-base-300 text-base-content py-10 px-5">
@@ -49,7 +48,6 @@ const AllMovies = () => {
                 </p>
                 
                 <div className="card-actions justify-end mt-3">
-                  <p>{movie._id}</p>
                   <Link
                     to={`/movies/${movie._id}`}
                     state={{ movie }}

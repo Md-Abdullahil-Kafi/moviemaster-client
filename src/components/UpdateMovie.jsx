@@ -7,7 +7,7 @@ const UpdateMovie = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
   const movieData = state?.movie;
-
+  
   if (!movieData) {
     return (
       <div className="min-h-screen bg-base-300 text-gray-400 flex items-center justify-center">
@@ -15,23 +15,53 @@ const UpdateMovie = () => {
       </div>
     );
   }
-
   const [formData, setFormData] = useState({ ...movieData });
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleUpdate = (e) => {
-    e.preventDefault();
-    // Normally you'd send the updated data to your backend API here
-    toast.success(`${formData.title} updated successfully!`);
-    navigate(`/movies/${encodeURIComponent(formData.title)}`, {
-      state: { movie: formData },
-    });
-  };
+const handleUpdate = async (e) => {
+  e.preventDefault();
 
+  try {
+    // prepare payload but DON'T send _id in body
+    const payload = { ...formData };
+    const id = payload._id ? String(payload._id) : null;
+    if (payload._id) delete payload._id;
+
+    if (!id) {
+      toast.error("Missing movie id");
+      return;
+    }
+
+    const res = await fetch(`http://localhost:3000/allMovies/${encodeURIComponent(id)}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+
+    // better error handling:
+    if (!res.ok) {
+      // try to parse json error, otherwise get text
+      let errText;
+      try {
+        const errJson = await res.json();
+        errText = errJson.message || JSON.stringify(errJson);
+      } catch {
+        errText = await res.text();
+      }
+      throw new Error(errText || `Request failed with status ${res.status}`);
+    }
+
+    const data = await res.json();
+    toast.success(`${formData.title} updated successfully!`);
+    navigate(`/myCollection`);
+  } catch (err) {
+    console.error("Update failed:", err);
+    toast.error("Update failed: " + (err.message || "Server error"));
+  }
+};
   return (
     <div className="min-h-screen bg-base-300 text-base-content flex justify-center items-center p-6">
       <motion.div

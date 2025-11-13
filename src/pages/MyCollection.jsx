@@ -1,7 +1,7 @@
-import React, { useContext, useEffect, useMemo, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { FaStar, FaEdit, FaTrash } from "react-icons/fa";
-import { Link, useNavigate, useRouteLoaderData } from "react-router";
+import { Link, useLoaderData, useNavigate } from "react-router";
 import { FaPlus } from "react-icons/fa";
 import toast from "react-hot-toast";
 import { AuthContext } from "../components/providers/AuthProvider";
@@ -10,9 +10,8 @@ const MyCollection = () => {
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const data = useRouteLoaderData("movies-root") || [];
+  const data = useLoaderData() || [];
 
-  // start with empty — we'll fill from loader data filtered by user email
   const [myMovies, setMyMovies] = useState([]);
 
   const filteredByUser = useMemo(() => {

@@ -38,6 +38,7 @@ const router = createBrowserRouter([
         {
             path: "/myCollection",
             element: <PrivetRoute><MyCollection></MyCollection></PrivetRoute>,
+            loader: ()=>fetch('http://localhost:3000/allMovies'),
         },
         {
             path: "/login",
@@ -55,7 +56,7 @@ const router = createBrowserRouter([
         },
         {
             path:"/updateMovie/:id",
-            element: <PrivetRoute><UpdateMovie></UpdateMovie></PrivetRoute>
+            element: <PrivetRoute><UpdateMovie></UpdateMovie></PrivetRoute>,
         },
         {
             path: "/add-movie",
