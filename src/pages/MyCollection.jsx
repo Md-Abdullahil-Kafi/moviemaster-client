@@ -1,60 +1,60 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { FaStar, FaEdit, FaTrash } from "react-icons/fa";
-import { Link, useNavigate } from "react-router";
+import { Link, useNavigate, useRouteLoaderData } from "react-router";
 import { FaPlus } from "react-icons/fa";
 import toast from "react-hot-toast";
+import { AuthContext } from "../components/providers/AuthProvider";
 
 const MyCollection = () => {
+  const { user } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  // Example data (you can later fetch from backend)
-  const [myMovies, setMyMovies] = useState([
-    {
-      title: "Inception",
-      genre: "Sci-Fi",
-      releaseYear: 2010,
-      director: "Christopher Nolan",
-      cast: "Leonardo DiCaprio, Joseph Gordon-Levitt",
-      rating: 8.8,
-      duration: 148,
-      plotSummary:
-        "A thief who steals corporate secrets through dream-sharing technology...",
-      posterUrl: "https://i.ibb.co/example.jpg",
-      language: "English",
-      country: "USA",
-      addedBy: "user@example.com",
-    },
-    {
-      title: "The Dark Knight",
-      genre: "Action, Crime, Drama",
-      releaseYear: 2008,
-      director: "Christopher Nolan",
-      cast: "Christian Bale, Heath Ledger",
-      rating: 9.0,
-      duration: 152,
-      plotSummary:
-        "When the menace known as the Joker wreaks havoc on Gotham, Batman must accept one of the greatest psychological tests.",
-      posterUrl: "https://i.ibb.co/Xp4hJw8/dark-knight.jpg",
-      language: "English",
-      country: "USA",
-      addedBy: "user@example.com",
-    },
-  ]);
+  const data = useRouteLoaderData("movies-root") || [];
 
-  const loggedInUserEmail = "user@example.com"; // Replace later with your auth user
+  // start with empty — we'll fill from loader data filtered by user email
+  const [myMovies, setMyMovies] = useState([]);
 
-  // ✏️ Handle Edit → Go to Update Page
+  const filteredByUser = useMemo(() => {
+    if (!Array.isArray(data) || !user?.email) return [];
+
+    const email = String(user.email).toLowerCase();
+    return data.filter((movie) => {
+      const owner =
+        (movie.addedBy ?? movie.owner ?? movie.userEmail ?? "").toString();
+      return owner.toLowerCase() === email;
+    });
+  }, [data, user]);
+
+  useEffect(() => {
+    const a = myMovies;
+    const b = filteredByUser;
+
+    const sameLength = a.length === b.length;
+    const firstEqual =
+      sameLength &&
+      ((a[0]?._id ?? a[0]?.title) === (b[0]?._id ?? b[0]?.title));
+
+    if (!sameLength || !firstEqual) {
+      setMyMovies(b);
+    }
+  }, [filteredByUser]);
+
+  const loggedInUserEmail = user?.email;
+
   const handleEdit = (movie) => {
-    navigate(`/edit/${encodeURIComponent(movie.title)}`, { state: { movie } });
+    const id = movie._id ? encodeURIComponent(String(movie._id)) : encodeURIComponent(movie.title);
+    navigate(`/edit/${id}`, { state: { movie } });
   };
 
-  // 🗑️ Handle Delete
-  const handleDelete = (title) => {
+  const handleDelete = (identifier) => {
     setMyMovies((prevMovies) =>
-      prevMovies.filter((movie) => movie.title !== title)
+      prevMovies.filter((movie) => {
+        if (movie._id) return String(movie._id) !== String(identifier);
+        return movie.title !== identifier;
+      })  
     );
-    toast.success(`${title} deleted successfully!`);
+    toast.success(`${identifier} deleted successfully!`);
   };
 
   return (
@@ -71,80 +71,76 @@ const MyCollection = () => {
 
         {myMovies.length === 0 ? (
           <>
-          <p className="text-center text-secondary-content">
-            You haven’t added any movies yet.
-          </p>
-          <Link to="/add-movie" className="btn btn-primary text-base-content">
-            <FaPlus className="mr-2" /> Add Your First Movie
-         </Link>
+            <p className="text-center text-secondary-content">
+              You haven’t added any movies yet.
+            </p>
+            <Link to="/add-movie" className="btn btn-primary text-base-content">
+              <FaPlus className="mr-2" /> Add Your First Movie
+            </Link>
           </>
-          
         ) : (
           <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+            <Link
+              to="/add-movie"
+              className="btn btn-primary btn-circle fixed bottom-6 right-6 shadow-lg hover:scale-110 transition-transform"
+            >
+              <FaPlus className="text-xl" />
+            </Link>
 
-                <Link
-                to="/add-movie"
-                className="btn btn-primary btn-circle fixed bottom-6 right-6 shadow-lg hover:scale-110 transition-transform"
-                >
-                <FaPlus className="text-xl" />
-                </Link>
+            {myMovies.map((movie, index) => (
+              <motion.div
+                key={movie._id ? String(movie._id) : index}
+                whileHover={{ scale: 1.05 }}
+                transition={{ type: "spring", stiffness: 200 }}
+                className="card bg-base-200 shadow-xl hover:shadow-primary transition-shadow"
+              >
+                <figure className="h-72">
+                  <img
+                    src={movie.posterUrl || "https://i.ibb.co/example.jpg"}
+                    alt={movie.title}
+                    className="object-cover w-full h-full rounded-t-2xl"
+                  />
+                </figure>
 
-            {myMovies
-              .filter((movie) => movie.addedBy === loggedInUserEmail)
-              .map((movie, index) => (
-                <motion.div
-                  key={index}
-                  whileHover={{ scale: 1.05 }}
-                  transition={{ type: "spring", stiffness: 200 }}
-                  className="card bg-base-200 shadow-xl hover:shadow-primary transition-shadow"
-                >
-                  <figure className="h-72">
-                    <img
-                      src={movie.posterUrl}
-                      alt={movie.title}
-                      className="object-cover w-full h-full rounded-t-2xl"
-                    />
-                  </figure>
+                <div className="card-body">
+                  <h2 className="card-title text-lg font-semibold">
+                    {movie.title}
+                  </h2>
+                  <div className="flex items-center gap-2 text-yellow-400">
+                    <FaStar /> <span>{movie.rating ?? "N/A"}</span>
+                  </div>
+                  <p className="text-sm text-gray-400">
+                    {movie.genre} • {movie.releaseYear}
+                  </p>
 
-                  <div className="card-body">
-                    <h2 className="card-title text-lg font-semibold">
-                      {movie.title}
-                    </h2>
-                    <div className="flex items-center gap-2 text-yellow-400">
-                      <FaStar /> <span>{movie.rating}</span>
-                    </div>
-                    <p className="text-sm text-gray-400">
-                      {movie.genre} • {movie.releaseYear}
-                    </p>
+                  {/* Quick Actions */}
+                  <div className="flex justify-between items-center mt-3">
+                    <Link
+                      to={`/movies/${movie._id ? encodeURIComponent(String(movie._id)) : encodeURIComponent(movie.title)}`}
+                      state={{ movie }}
+                      className="btn btn-primary btn-sm"
+                    >
+                      Details
+                    </Link>
 
-                    {/* Quick Actions */}
-                    <div className="flex justify-between items-center mt-3">
-                      <Link
-                        to={`/movies/${encodeURIComponent(movie.title)}`}
-                        state={{ movie }}
-                        className="btn btn-primary btn-sm"
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => handleEdit(movie)}
+                        className="btn btn-warning btn-sm flex items-center gap-1"
                       >
-                        Details
-                      </Link>
-
-                      <div className="flex gap-2">
-                        <button
-                          onClick={() => handleEdit(movie)}
-                          className="btn btn-warning btn-sm flex items-center gap-1"
-                        >
-                          <FaEdit />
-                        </button>
-                        <button
-                          onClick={() => handleDelete(movie.title)}
-                          className="btn btn-error btn-sm flex items-center gap-1"
-                        >
-                          <FaTrash />
-                        </button>
-                      </div>
+                        <FaEdit />
+                      </button>
+                      <button
+                        onClick={() => handleDelete(movie._id ? String(movie._id) : movie.title)}
+                        className="btn btn-error btn-sm flex items-center gap-1"
+                      >
+                        <FaTrash />
+                      </button>
                     </div>
                   </div>
-                </motion.div>
-              ))}
+                </div>
+              </motion.div>
+            ))}
           </div>
         )}
       </div>

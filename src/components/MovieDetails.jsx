@@ -1,16 +1,18 @@
-import React, { useContext } from "react";
-import { useLocation, useNavigate } from "react-router";
+import  { useContext } from "react";
+import { useLoaderData, useNavigate} from "react-router";
 import { motion } from "framer-motion";
 import { FaArrowLeft, FaStar, FaEdit, FaTrash } from "react-icons/fa";
-import { toast } from "react-hot-toast"; // optional if you use react-hot-toast
+// import { toast } from "react-hot-toast"; 
 import { AuthContext } from "./providers/AuthProvider";
 
 
 const MovieDetails = () => {
-  const { state } = useLocation();
+  // const { state } = useLocation();
   const navigate = useNavigate();
-  const {user}=useContext(AuthContext)
-  const movie = state?.movie;
+  const {user}=useContext(AuthContext);
+  // const movie = state?.movie; 
+  const data = useLoaderData();
+  const movie = data.result
 
   // Example logged-in user (you can replace with your actual auth context)
   const loggedInUserEmail = user.email;

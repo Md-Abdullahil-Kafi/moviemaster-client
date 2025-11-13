@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useContext } from "react";
 import { motion } from "framer-motion";
-import { Link, useLoaderData } from "react-router";
+import { Link, useRouteLoaderData } from "react-router";
 import { FaStar } from "react-icons/fa";
 
 
+
 const AllMovies = () => {
-  const data = useLoaderData();
+  const data = useRouteLoaderData("movies-root");
+  
   return (
     <div className="min-h-screen bg-base-300 text-base-content py-10 px-5">
       <div className="max-w-7xl mx-auto">
@@ -22,10 +24,11 @@ const AllMovies = () => {
         <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
           {data.map((movie, index) => (
             <motion.div
-              key={index}
-              whileHover={{ scale: 1.05 }}
-              transition={{ type: "spring", stiffness: 200 }}
-              className="card bg-base-200 shadow-xl hover:shadow-primary transition-shadow"
+            key={index}
+            whileHover={{ scale: 1.05 }}
+            transition={{ type: "spring", stiffness: 200 }}
+            className="card bg-base-200 shadow-xl hover:shadow-primary transition-shadow"
+            
             >
               <figure className="h-72">
                 <img
@@ -44,10 +47,11 @@ const AllMovies = () => {
                 <p className="text-sm text-gray-400">
                   {movie.genre} • {movie.releaseYear}
                 </p>
-
+                
                 <div className="card-actions justify-end mt-3">
+                  <p>{movie._id}</p>
                   <Link
-                    to={`/movies/${encodeURIComponent(movie.title)}`}
+                    to={`/movies/${movie._id}`}
                     state={{ movie }}
                     className="btn btn-primary btn-sm"
                   >

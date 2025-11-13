@@ -13,10 +13,18 @@ import ProfileSettings from "../pages/ProfileSettings";
 import PrivetRoute from "../PrivetRoute/PrivetRoute";
 
 
+async function moviesLoader() {
+  const res = await fetch("http://localhost:3000/allMovies");
+  return res.json();
+}
+
+
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Layout></Layout>,
+    id: "movies-root", // 👈 এই id টা খুব দরকারি
+    loader: moviesLoader, // 👈 এখানে সব movie data আসবে
     children: [
         {
             index: true,
@@ -29,7 +37,7 @@ const router = createBrowserRouter([
         },
         {
             path: "/myCollection",
-            element: <PrivetRoute><MyCollection></MyCollection></PrivetRoute>
+            element: <PrivetRoute><MyCollection></MyCollection></PrivetRoute>,
         },
         {
             path: "/login",
@@ -40,8 +48,9 @@ const router = createBrowserRouter([
             element: <Register></Register>
         },
         {
-            path: "/movies/:title",
-            element: <PrivetRoute><MovieDetails></MovieDetails></PrivetRoute>
+            path: "/movies/:id",
+            element: <PrivetRoute><MovieDetails></MovieDetails></PrivetRoute>,
+            loader: ({params})=> fetch(`http://localhost:3000/allMovies/${params.id}`)
             
         },
         {
