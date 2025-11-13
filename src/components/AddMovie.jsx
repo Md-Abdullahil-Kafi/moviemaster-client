@@ -35,7 +35,7 @@ const AddMovie = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     // Normally you'd send this data to your backend here
-    fetch('http://localhost:3000/allMovies',{
+    fetch('http://localhost:3000/movies/add',{
       method: "POST",
       headers:{
         "Content-Type" : "application/json",

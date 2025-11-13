@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Link, useLoaderData} from "react-router";
 import { FaStar } from "react-icons/fa";
+import Container from "../components/Container";
 
 
 
@@ -8,7 +9,8 @@ const AllMovies = () => {
   const data = useLoaderData();
   
   return (
-    <div className="min-h-screen bg-base-300 text-base-content py-10 px-5">
+    <Container>
+      <div className="min-h-screen text-base-content py-10 px-5">
       <div className="max-w-7xl mx-auto">
         <motion.h1
           initial={{ opacity: 0, y: -20 }}
@@ -20,7 +22,7 @@ const AllMovies = () => {
         </motion.h1>
 
         {/* Movie Grid */}
-        <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+        <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {data.map((movie, index) => (
             <motion.div
             key={index}
@@ -62,6 +64,7 @@ const AllMovies = () => {
         </div>
       </div>
     </div>
+    </Container>
   );
 };
 

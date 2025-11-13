@@ -17,7 +17,7 @@ export function TopRatedMovies({ limit = 5 }) {
   }, [limit]);
 
   return (
-    <section className="py-12 bg-linear-to-b from-black via-gray-900 to-black  text-white">
+    <section className="py-12   text-white">
       <div className="container mx-auto px-6">
         <FadeInSection>
         <h3 className="text-2xl font-bold mb-6">Top Rated Movies</h3>

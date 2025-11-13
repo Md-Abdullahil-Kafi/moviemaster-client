@@ -1,12 +1,18 @@
-import React, { useMemo, useState } from "react";
-import Slider from "react-slick";
+import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { Link, useRouteLoaderData } from "react-router";
 import HeroSection from "../components/HeroSection";
+import Container from "../components/Container";
+import RecentlyAdded from "../components/recently/RecentlyAdded";
 
 const Home = () => {
+
+  useEffect(()=>{
+
+  },[])
+
   const data = useRouteLoaderData("movies-root");
   const safeData = data || [];
 
@@ -83,7 +89,8 @@ const Home = () => {
       </motion.section>
 
       {/*  TOP RATED MOVIES */}
-      <section className="px-6">
+      <Container>
+        <section className="px-6">
         <h2 className="text-3xl font-bold mb-6">Top Rated Movies</h2>
         <div className="grid md:grid-cols-5 gap-6">
           {topRated.map((movie) => (
@@ -109,35 +116,15 @@ const Home = () => {
           ))}
         </div>
       </section>
+      </Container>
 
       {/*  RECENTLY ADDED */}
-      <section className="px-6">
-        <h2 className="text-3xl font-bold mb-6">Recently Added</h2>
-        <div className="grid md:grid-cols-3 gap-6">
-          {recent.map((movie) => (
-            <motion.div
-              key={movie.id ?? movie._id}
-              className="bg-base-200 rounded-xl shadow-md overflow-hidden"
-              whileHover={{ scale: 1.03 }}
-            >
-              <Link to={`/movies/${encodeURIComponent(movie.title)}`}>
-                <img
-                  src={movie.posterUrl}
-                  alt={movie.title}
-                  className="h-60 w-full object-cover"
-                />
-                <div className="p-4">
-                  <h3 className="font-bold">{movie.title}</h3>
-                  <p className="text-sm text-gray-500">{movie.genre}</p>
-                </div>
-              </Link>
-            </motion.div>
-          ))}
-        </div>
-      </section>
+      <Container><RecentlyAdded></RecentlyAdded></Container>
+
 
       {/*  GENRE SECTION - UPDATED WITH TOGGLE FILTER */}
-      <motion.section
+      <Container>
+        <motion.section
         className="text-center px-6"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
@@ -149,7 +136,7 @@ const Home = () => {
             <button
               key={genre}
               className={`btn btn-outline btn-sm rounded-full transition ${
-                selectedGenre === genre ? "btn-primary text-white" : ""
+                selectedGenre === genre ? "btn-primary text-blue-400" : ""
               }`}
               onClick={() =>
                 setSelectedGenre((prev) => (prev === genre ? "All" : genre))
@@ -208,9 +195,11 @@ const Home = () => {
           )}
         </div>
       </motion.section>
+      </Container>
 
       {/*  ABOUT PLATFORM */}
-      <motion.section
+      <Container>
+        <motion.section
         className="text-center px-6 max-w-3xl mx-auto"
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -224,6 +213,7 @@ const Home = () => {
           and beauty in mind.
         </p>
       </motion.section>
+      </Container>
     </div>
   );
 };

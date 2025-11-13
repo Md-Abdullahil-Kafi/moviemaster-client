@@ -35,7 +35,7 @@ const MovieDetails = () => {
     if (!confirmed.isConfirmed) return;
 
     try {
-      const res = await fetch(`http://localhost:3000/allMovies/${encodeURIComponent(movie._id)}`, {
+      const res = await fetch(`http://localhost:3000/movies/${encodeURIComponent(movie._id)}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -58,7 +58,8 @@ const MovieDetails = () => {
       const result = await res.json(); // should be valid JSON on success
       await swal.fire("Deleted!", "The movie has been deleted.", "success");
       navigate("/myCollection");
-    } catch (err) {
+    } 
+    catch (err) {
       console.error("Delete failed:", err);
       swal.fire("Error", "Delete failed: " + (err.message || "Server error"), "error");
     }

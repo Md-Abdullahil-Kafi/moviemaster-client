@@ -5,6 +5,7 @@ import { Link, useLoaderData, useNavigate } from "react-router";
 import { FaPlus } from "react-icons/fa";
 import toast from "react-hot-toast";
 import { AuthContext } from "../components/providers/AuthProvider";
+import Container from "../components/Container";
 
 const MyCollection = () => {
   const { user } = useContext(AuthContext);
@@ -19,25 +20,25 @@ const MyCollection = () => {
 
     const email = String(user.email).toLowerCase();
     return data.filter((movie) => {
-      const owner =
+    const owner =
         (movie.addedBy ?? movie.owner ?? movie.userEmail ?? "").toString();
       return owner.toLowerCase() === email;
     });
   }, [data, user]);
 
-  useEffect(() => {
-    const a = myMovies;
-    const b = filteredByUser;
+  // useEffect(() => {
+  //   const a = myMovies;
+  //   const b = filteredByUser;
 
-    const sameLength = a.length === b.length;
-    const firstEqual =
-      sameLength &&
-      ((a[0]?._id ?? a[0]?.title) === (b[0]?._id ?? b[0]?.title));
+  //   const sameLength = a.length === b.length;
+  //   const firstEqual =
+  //     sameLength &&
+  //     ((a[0]?._id ?? a[0]?.title) === (b[0]?._id ?? b[0]?.title));
 
-    if (!sameLength || !firstEqual) {
-      setMyMovies(b);
-    }
-  }, [filteredByUser]);
+  //   if (!sameLength || !firstEqual) {
+  //     setMyMovies(b);
+  //   }
+  // }, [filteredByUser]);
 
   const loggedInUserEmail = user?.email;
 
@@ -46,18 +47,19 @@ const MyCollection = () => {
     navigate(`/updateMovie/${id}`, { state: { movie } });
   };
 
-  const handleDelete = (identifier) => {
-    setMyMovies((prevMovies) =>
-      prevMovies.filter((movie) => {
-        if (movie._id) return String(movie._id) !== String(identifier);
-        return movie.title !== identifier;
-      })  
-    );
-    toast.success(`${identifier} deleted successfully!`);
-  };
+  // const handleDelete = (identifier) => {
+  //   setMyMovies((prevMovies) =>
+  //     prevMovies.filter((movie) => {
+  //       if (movie._id) return String(movie._id) !== String(identifier);
+  //       return movie.title !== identifier;
+  //     })  
+  //   );
+  //   toast.success(`${identifier} deleted successfully!`);
+  // };
 
   return (
-    <div className="min-h-screen bg-base-300 text-base-content py-10 px-5">
+    <Container>
+      <div className="min-h-screen text-base-content py-10 px-5">
       <div className="max-w-7xl mx-auto">
         <motion.h1
           initial={{ opacity: 0, y: -20 }}
@@ -78,7 +80,7 @@ const MyCollection = () => {
             </Link>
           </>
         ) : (
-          <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+          <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
             <Link
               to="/add-movie"
               className="btn btn-primary btn-circle fixed bottom-6 right-6 shadow-lg hover:scale-110 transition-transform"
@@ -129,12 +131,17 @@ const MyCollection = () => {
                       >
                         <FaEdit />
                       </button>
-                      <button
+                    
+                    {/* Delete button Desabled */}
+                      {/* <button
                         onClick={() => handleDelete(movie._id ? String(movie._id) : movie.title)}
                         className="btn btn-error btn-sm flex items-center gap-1"
                       >
                         <FaTrash />
-                      </button>
+                      </button> */}
+
+
+
                     </div>
                   </div>
                 </div>
@@ -144,6 +151,7 @@ const MyCollection = () => {
         )}
       </div>
     </div>
+    </Container>
   );
 };
 

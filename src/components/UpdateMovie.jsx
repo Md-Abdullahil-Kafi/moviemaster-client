@@ -35,7 +35,7 @@ const handleUpdate = async (e) => {
       return;
     }
 
-    const res = await fetch(`http://localhost:3000/allMovies/${encodeURIComponent(id)}`, {
+    const res = await fetch(`http://localhost:3000/movies/update/${encodeURIComponent(id)}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),

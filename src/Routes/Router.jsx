@@ -14,7 +14,7 @@ import PrivetRoute from "../PrivetRoute/PrivetRoute";
 
 
 async function moviesLoader() {
-  const res = await fetch("http://localhost:3000/allMovies");
+  const res = await fetch("http://localhost:3000/movies");
   return res.json();
 }
 
@@ -33,12 +33,12 @@ const router = createBrowserRouter([
         {
             path: "/allmovies",
             element: <AllMovies></AllMovies>,
-            loader: ()=>fetch('http://localhost:3000/allMovies'),
+            loader: ()=>fetch('http://localhost:3000/movies'),
         },
         {
             path: "/myCollection",
             element: <PrivetRoute><MyCollection></MyCollection></PrivetRoute>,
-            loader: ()=>fetch('http://localhost:3000/allMovies'),
+            loader: ()=>fetch('http://localhost:3000/latest-movie'),
         },
         {
             path: "/login",
@@ -51,7 +51,7 @@ const router = createBrowserRouter([
         {
             path: "/movies/:id",
             element: <PrivetRoute><MovieDetails></MovieDetails></PrivetRoute>,
-            loader: ({params})=> fetch(`http://localhost:3000/allMovies/${params.id}`)
+            loader: ({params})=> fetch(`http://localhost:3000/movies/${params.id}`)
             
         },
         {
