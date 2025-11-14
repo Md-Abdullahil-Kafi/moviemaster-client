@@ -17,7 +17,7 @@ useEffect(() => {
     try {
       const token = user.accessToken;
       const res = await fetch(
-        `http://localhost:3000/my-collection?email=${user.email}`,
+        `http://localhost:3000/movie/my-collection?email=${user.email}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,   
