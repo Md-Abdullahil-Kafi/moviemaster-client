@@ -6,63 +6,23 @@ import { Link, useRouteLoaderData } from "react-router";
 import HeroSection from "../components/HeroSection";
 import Container from "../components/Container";
 import RecentlyAdded from "../components/recently/RecentlyAdded";
+import TopRatedMovies from "../components/top-rated/TopRatedMovies";
+import GenreSection from "../components/genre/GenreSection";
+
 
 const Home = () => {
-
-  useEffect(()=>{
-
-  },[])
 
   const data = useRouteLoaderData("movies-root");
   const safeData = data || [];
 
   const [selectedGenre, setSelectedGenre] = useState("All");
 
-  const topRated = useMemo(
-    () => [...safeData].sort((a, b) => b.rating - a.rating).slice(0, 5),
-    [safeData]
-  );
-
-  const recent = useMemo(
-    () =>
-      [...safeData]
-        .sort(
-          (a, b) =>
-            new Date(b.addedAt).getTime() - new Date(a.addedAt).getTime()
-        )
-        .slice(0, 6),
-    [safeData]
-  );
-
   const stats = {
     totalMovies: safeData.length,
     totalUsers: 45, // fake API number
   };
 
-  const genres = [
-    "All",
-    "Action",
-    "Drama",
-    "Comedy",
-    "Fantasy",
-    "Sci-Fi",
-    "Romance",
-    "Adventure",
-    "Animation",
-  ];
-
-  const sliderSettings = {
-    dots: true,
-    infinite: true,
-    autoplay: true,
-    speed: 800,
-    autoplaySpeed: 3000,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    arrows: false,
-  };
-
-  return (
+   return (
     <div className="space-y-16 pb-20">
       {/* 🎬 HERO SECTION */}
       <HeroSection safeData={safeData}></HeroSection>
@@ -89,7 +49,7 @@ const Home = () => {
       </motion.section>
 
       {/*  TOP RATED MOVIES */}
-      <Container>
+      {/* <Container>
         <section className="px-6 ">
         <h2 className="text-3xl font-bold mb-6">Top Rated Movies</h2>
         <div className="grid md:grid-cols-3 gap-6">
@@ -116,6 +76,10 @@ const Home = () => {
           ))}
         </div>
       </section>
+      </Container> */}
+
+      <Container>
+        <TopRatedMovies></TopRatedMovies>
       </Container>
 
       {/*  RECENTLY ADDED */}
@@ -123,79 +87,11 @@ const Home = () => {
 
 
       {/*  GENRE SECTION - UPDATED WITH TOGGLE FILTER */}
+     
       <Container>
-        <motion.section
-        className="text-center px-6"
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-      >
-        <h2 className="text-3xl font-bold mb-6">Explore by Genre</h2>
-
-        <div className="flex flex-wrap justify-center gap-3 mb-8">
-          {genres.map((genre) => (
-            <button
-              key={genre}
-              className={`btn btn-outline btn-sm rounded-full transition ${
-                selectedGenre === genre ? "btn-primary text-blue-400" : ""
-              }`}
-              onClick={() =>
-                setSelectedGenre((prev) => (prev === genre ? "All" : genre))
-              }
-            >
-              {genre}
-            </button>
-          ))}
-        </div>
-
-        {/* Filtered Movies */}
-        <div className="grid md:grid-cols-3 gap-6">
-          {safeData
-            .filter(
-              (movie) =>
-                selectedGenre === "All" ||
-                movie.genre?.toLowerCase().includes(selectedGenre.toLowerCase())
-            )
-            .map((movie) => (
-              <motion.div
-                key={movie._id ?? movie.id ?? movie.title}
-                className="bg-base-200 rounded-xl shadow-md overflow-hidden flex flex-col"
-                whileHover={{ scale: 1.02 }}
-              >
-                <Link
-                  to={`/movies/${movie._id}`}
-                  className="flex flex-col h-full"
-                >
-                  <div className="h-60 overflow-hidden">
-                    <img
-                      src={movie.posterUrl || "https://i.ibb.co/placeholder.png"}
-                      alt={movie.title}
-                      className="object-cover w-full h-full"
-                    />
-                  </div>
-                  <div className="p-4 flex-1 flex flex-col justify-between">
-                    <div>
-                      <h3 className="font-bold text-lg">{movie.title}</h3>
-                      <p className="text-sm text-gray-500">{movie.genre}</p>
-                    </div>
-                    <div className="mt-3">
-                      <button className="btn btn-outline btn-sm w-full">
-                        Details
-                      </button>
-                    </div>
-                  </div>
-                </Link>
-              </motion.div>
-            ))}
-          {safeData.filter(
-            (movie) =>
-              selectedGenre !== "All" &&
-              !movie.genre?.toLowerCase().includes(selectedGenre.toLowerCase())
-          ).length === safeData.length && (
-            <p className="text-gray-500 col-span-full">No movies found for {selectedGenre}</p>
-          )}
-        </div>
-      </motion.section>
+        <GenreSection safeData={safeData}></GenreSection>
       </Container>
+     
 
       {/*  ABOUT PLATFORM */}
       <Container>

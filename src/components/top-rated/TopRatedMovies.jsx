@@ -1,43 +1,59 @@
-import { useEffect, useState } from "react";
-import { fakeApi } from "../api/fakeApi";
-import FadeInSection from "../motion/FadeInSection";
+import { useContext, useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import { Link } from "react-router";
+import { AuthContext } from "../providers/AuthProvider";
 
-export function TopRatedMovies({ limit = 5 }) {
+const TopRatedMovies = ()=> {
   const [movies, setMovies] = useState([]);
+  const {setLoading}=useContext(AuthContext)
 
   useEffect(() => {
-    let mounted = true;
-    (async () => {
-      const data = await fakeApi.fetchMovies(200);
-      if (!mounted) return;
-      const sorted = data.sort((a, b) => b.rating - a.rating).slice(0, limit);
-      setMovies(sorted);
-    })();
-    return () => (mounted = false);
-  }, [limit]);
+
+    fetch("http://localhost:3000/topMovies")
+      .then((res) => res.json())
+      .then((data) => {
+        setMovies(data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Error fetching latest movies:", err);
+        setLoading(false);
+      });
+  }, []); 
+
 
   return (
-    <section className="py-12   text-white">
-      <div className="container mx-auto px-6">
-        <FadeInSection>
-        <h3 className="text-2xl font-bold mb-6">Top Rated Movies</h3>
-        </FadeInSection>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-          {movies.map((m) => (
-           <FadeInSection>
-            <article key={m.id} className="bg-white/5 rounded-lg overflow-hidden shadow-xl hover:scale-105  hover:shadow-primary transition-shadow">
-              <img src={m.posterUrl} alt={m.title} className="w-full h-56 object-cover" />
-              <div className="p-3">
-                <h4 className="font-semibold">{m.title}</h4>
-                <div className="text-sm text-gray-300">{m.genre} • {m.releaseYear}</div>
-                <div className="text-orange-400 font-bold mt-2">⭐ {m.rating}</div>
-              </div>
-            </article>
-           </FadeInSection>
+    <section className="p-6">
+      <h2 className="text-3xl font-bold mb-4 text-white">🎬 Top Rated Movies</h2>
 
+      {movies.length === 0 ? (
+        <p className="text-gray-400">No movies found</p>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          {movies.map((movie) => (
+            <motion.div
+              key={movie.id ?? movie._id}
+              className="bg-base-200 rounded-xl shadow-md overflow-hidden"
+              whileHover={{ scale: 1.03 }}
+            >
+              <Link to={`/movies/${movie._id}`}>
+                <img
+                  src={movie.posterUrl}
+                  alt={movie.title}
+                  className="h-60 w-full object-cover"
+                />
+                <div className="p-4">
+                  <h3 className="font-bold">{movie.title}</h3>
+                  <p className="text-sm text-gray-500">{movie.genre}</p>
+                </div>
+              </Link>
+            </motion.div>
           ))}
         </div>
-      </div>
+      )}
     </section>
   );
 }
+
+
+export default TopRatedMovies;

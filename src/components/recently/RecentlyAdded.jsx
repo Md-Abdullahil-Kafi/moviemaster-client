@@ -1,13 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router";
 import Container from "../Container";
+import { AuthContext } from "../providers/AuthProvider";
 
 const RecentlyAdded = ()=> {
   const [movies, setMovies] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const {setLoading}=useContext(AuthContext)
 
   useEffect(() => {
+
     fetch("http://localhost:3000/latest-movie")
       .then((res) => res.json())
       .then((data) => {
@@ -20,7 +22,6 @@ const RecentlyAdded = ()=> {
       });
   }, []); 
 
-  if (loading) return <p className="text-center mt-6 text-gray-400">Loading...</p>;
 
   return (
     <section className="p-6">
