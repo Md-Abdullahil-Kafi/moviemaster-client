@@ -41,8 +41,8 @@ const LogIn = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-base-300 text-base-content">
       <div className="relative w-full max-w-lg">
-        <div className="absolute -top-10 -left-10 w-56 h-56 bg-gradient-to-tr from-indigo-400 to-purple-500 rounded-full opacity-30 blur-3xl" />
-        <div className="absolute -bottom-12 -right-10 w-64 h-64 bg-gradient-to-br from-pink-400 to-yellow-300 rounded-full opacity-30 blur-3xl" />
+        <div className="absolute -top-10 -left-10 w-56 h-56 bg-linear-to-tr from-indigo-400 to-purple-500 rounded-full opacity-30 blur-3xl" />
+        <div className="absolute -bottom-12 -right-10 w-64 h-64 bg-linear-to-br from-pink-400 to-yellow-300 rounded-full opacity-30 blur-3xl" />
 
         <div className="relative backdrop-blur-md rounded-3xl shadow-2xl overflow-hidden border bg-transparent">
           <div className="p-8 md:p-12">
@@ -84,7 +84,7 @@ const LogIn = () => {
 
               <button
                 type="submit"
-                className="w-full py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-500 text-white font-semibold text-lg shadow-lg"
+                className="w-full py-3 rounded-xl bg-linear-to-r from-indigo-600 to-violet-500 text-white font-semibold text-lg shadow-lg"
               >
                 Login
               </button>

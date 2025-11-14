@@ -235,7 +235,7 @@ const Register = () => {
                 type="submit"
                 className={`w-full py-3 rounded-lg text-white font-semibold ${
                   isFormValid
-                    ? "bg-gradient-to-r from-indigo-600 to-violet-500 shadow-lg"
+                    ? "bg-linear-to-r from-indigo-600 to-violet-500 shadow-lg"
                     : "bg-gray-700 cursor-not-allowed"
                 }`}
                 disabled={!isFormValid}

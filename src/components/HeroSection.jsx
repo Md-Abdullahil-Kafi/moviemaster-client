@@ -93,7 +93,7 @@ export default function HeroSection({ safeData = [] }) {
                   <div className="flex gap-3">
                     <Link
                       to={`/movies/${m._id ?? m.id}`}
-                      className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-400 to-pink-500 text-black px-4 py-2 rounded-lg font-semibold shadow-lg hover:opacity-90 transition"
+                      className="inline-flex items-center gap-2 bg-linear-to-r from-amber-400 to-pink-500 text-black px-4 py-2 rounded-lg font-semibold shadow-lg hover:opacity-90 transition"
                     >
                       Show Details
                     </Link>

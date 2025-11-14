@@ -63,7 +63,7 @@ const Navbar = () => {
               className="text-2xl font-bold tracking-tight btn btn-ghost p-0 normal-case"
               aria-label="Go to homepage"
             >
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-amber-400 to-pink-500">
+              <span className="bg-clip-text text-transparent bg-linear-to-r from-amber-400 to-pink-500">
                 MovieMaster Pro
               </span>
             </Link>

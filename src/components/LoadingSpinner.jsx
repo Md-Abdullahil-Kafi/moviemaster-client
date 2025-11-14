@@ -13,7 +13,7 @@ const LoadingSpinner = () => {
       <div className="relative flex items-center justify-center">
         <div className="absolute w-24 h-24 rounded-full border-4 border-t-transparent border-primary animate-spin blur-[1px]"></div>
 
-        <div className="w-16 h-16 bg-gradient-to-tr from-primary to-pink-600 rounded-full animate-pulse shadow-lg shadow-primary/40"></div>
+        <div className="w-16 h-16 bg-linear-to-tr from-primary to-pink-600 rounded-full animate-pulse shadow-lg shadow-primary/40"></div>
       </div>
 
       <motion.p
