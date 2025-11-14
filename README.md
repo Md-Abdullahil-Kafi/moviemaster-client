@@ -18,7 +18,7 @@ A full-stack movie management platform where users can browse movies, manage the
 * Secure authentication with Firebase
 * User-specific collection (My Collection)
 * Protected routes (Add Movie, My Collection, Update Movie)
-* Watchlist system
+* WatchList system
 * Responsive and mobile-friendly UI
 
 ---
@@ -171,10 +171,10 @@ A full-stack movie management platform where users can browse movies, manage the
 * Filter by genre using `$in`
 * Rating range filter using `$gte` and `$lte`
 
-### **Watchlist Feature**
+### **WatchList Feature**
 
-* Add movies to watchlist
-* Dedicated Watchlist page
+* Add movies to watchList
+* Dedicated WatchList page
 
 ### **Theme Toggle (Dark/Light)**
 
