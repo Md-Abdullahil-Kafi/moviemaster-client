@@ -186,6 +186,15 @@ const Navbar = () => {
                         My Collection
                       </button>
                     </li>
+                    <li>
+                      <button
+                        onClick={() => navigate("/myWatchList")}
+                        className="btn btn-sm btn-ghost w-full text-left"
+                        role="menuitem"
+                      >
+                        My WatchList
+                      </button>
+                    </li>
                     <li className="pt-2">
                       <button onClick={handleLogout} className="btn btn-sm btn-error w-full" role="menuitem">
                         <FaSignOutAlt /> Logout

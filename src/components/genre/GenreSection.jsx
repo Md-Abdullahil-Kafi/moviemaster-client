@@ -95,8 +95,8 @@ export default function GenreSection({
                 key={g}
                 type="button"
                 onClick={() => toggleGenre(g)}
-                className={`btn btn-active btn-sm transition ${
-                  active ? "btn-active text-blue-700" : ""
+                className={`btn btn-ghost btn-sm transition ${
+                  active ? "btn-active text-blue-500" : ""
                 }`}
               >
                 {g} {active && <span className="ml-1 text-xs">✓</span>}

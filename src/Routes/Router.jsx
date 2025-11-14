@@ -11,6 +11,7 @@ import AddMovie from "../components/AddMovie";
 import NotFound from "../pages/NotFound";
 import ProfileSettings from "../pages/ProfileSettings";
 import PrivetRoute from "../PrivetRoute/PrivetRoute";
+import MyWatchList from "../components/MyWatchList";
 
 
 async function moviesLoader() {
@@ -59,6 +60,10 @@ const router = createBrowserRouter([
         {
             path: "/add-movie",
             element: <PrivetRoute><AddMovie></AddMovie></PrivetRoute>
+        },
+        {
+            path: "/myWatchList",
+            element: <PrivetRoute><MyWatchList></MyWatchList></PrivetRoute>
         },
         {
             path:"/profile-settings",

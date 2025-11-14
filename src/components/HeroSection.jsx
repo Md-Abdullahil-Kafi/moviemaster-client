@@ -1,16 +1,51 @@
-import React from "react";
+// src/components/HeroSection.jsx
+import React, { useContext, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Navigation, Pagination, EffectFade } from "swiper/modules";
 import { motion } from "framer-motion";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import { toast } from "react-hot-toast";
 
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/effect-fade";
+import { AuthContext } from "./providers/AuthProvider";
 
-export default function HeroSection({ safeData = [] }) {
+
+export default function HeroSection({ safeData = []}) {
   const slides = safeData || [];
+  const {loading}= useContext(AuthContext)
+  const handleAddWatchList = async (movie) => {
+    try {
+        const res = await fetch('http://localhost:3000/myWatchList', {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(movie),
+        });
+    
+        if (!res.ok) {
+          let errText;
+          try {
+            const errJson = await res.json();
+            errText = errJson.message || JSON.stringify(errJson);
+          } catch {
+            errText = await res.text();
+          }
+          throw new Error(errText || `Request failed with status ${res.status}`);
+        }
+    
+        const data = await res.json();
+        toast.success(`${movie.title} added successfully! 🎬`);
+      } catch (err) {
+        console.error("Add movie failed:", err);
+        toast.error("Add movie failed: " + (err.message || "Server error"));
+      }
+    
+
+  };
 
   return (
     <section className="relative w-full">
@@ -26,7 +61,7 @@ export default function HeroSection({ safeData = [] }) {
         className="hero-swiper"
       >
         {slides.map((m) => (
-          <SwiperSlide key={m._id || m.id}>
+          <SwiperSlide key={m._id ?? m.id}>
             <div
               className="relative h-[70vh] md:h-[80vh] flex items-center"
               style={{
@@ -57,13 +92,17 @@ export default function HeroSection({ safeData = [] }) {
 
                   <div className="flex gap-3">
                     <Link
-                      to={`/movies/${m._id || m.id}`}
+                      to={`/movies/${m._id ?? m.id}`}
                       className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-400 to-pink-500 text-black px-4 py-2 rounded-lg font-semibold shadow-lg hover:opacity-90 transition"
                     >
                       Show Details
                     </Link>
-                    <button className="inline-flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-lg border border-white/10 text-white hover:bg-white/20 transition">
-                      Add to Watchlist
+                    <button
+                      onClick={() => handleAddWatchList(m)}
+                      className="inline-flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-lg border border-white/10 text-white hover:bg-white/20 transition"
+                      disabled={loading}
+                    >
+                      {loading ? "Adding..." : "Add to Watchlist"}
                     </button>
                   </div>
                 </motion.div>

@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { FaArrowLeft, FaStar, FaEdit, FaTrash } from "react-icons/fa";
 import { AuthContext } from "./providers/AuthProvider";
 import swal from "sweetalert2";
+import toast from "react-hot-toast";
 
 
 
@@ -14,6 +15,8 @@ const MovieDetails = () => {
   const {setLoading} = useContext(AuthContext);
   const [movie, setMovie] = useState({});
   const {id} = useParams();
+  const {loading}= useContext(AuthContext)
+  
   
   useEffect(() => {
   const fetchMovie = async () => {
@@ -53,7 +56,37 @@ const MovieDetails = () => {
 
   const isOwner = movie.addedBy === loggedInUserEmail;
 
-
+    // Handle WatchList
+    const handleAddWatchList = async (movie) => {
+        try {
+            const res = await fetch('http://localhost:3000/myWatchList', {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(movie),
+            });
+        
+            if (!res.ok) {
+              let errText;
+              try {
+                const errJson = await res.json();
+                errText = errJson.message || JSON.stringify(errJson);
+              } catch {
+                errText = await res.text();
+              }
+              throw new Error(errText || `Request failed with status ${res.status}`);
+            }
+        
+            const data = await res.json();
+            toast.success(`${movie.title} added successfully! 🎬`);
+          } catch (err) {
+            console.error("Add movie failed:", err);
+            toast.error("Add movie failed: " + (err.message || "Server error"));
+          }
+        
+    
+      };
   
 
   // safer delete
@@ -119,7 +152,18 @@ const MovieDetails = () => {
 
           <div className="p-6 flex flex-col justify-between flex-1">
             <div>
+              <div className="flex justify-between">
               <h1 className="text-3xl font-bold mb-2 text-primary">{movie.title}</h1>
+
+              <button
+                      onClick={() => handleAddWatchList(movie)}
+                      className="btn btn-soft  transition"
+                      disabled={loading}
+                    >
+                      {loading ? "Adding..." : "Add to Watchlist"}
+                    </button>
+
+              </div>
 
               <div className="flex items-center gap-2 text-yellow-400 mb-3">
                 <FaStar /> <span>{movie.rating}</span>
