@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import LoadingSpinner from "../LoadingSpinner";
 
 export default function GenreSection({
-  fetchUrl = "http://localhost:3000/genreMovies",
+  fetchUrl = "https://moviemaster-server-omega.vercel.app/genreMovies",
   defaultSelected = ["Action"],
 }) {
   const genres = [
@@ -51,8 +51,10 @@ export default function GenreSection({
         if (selectedGenres && selectedGenres.length > 0) {
           qs.set("genres", selectedGenres.join(","));
         }
-        if (minRating !== "" && !isNaN(minRating)) qs.set("minRating", String(minRating));
-        if (maxRating !== "" && !isNaN(maxRating)) qs.set("maxRating", String(maxRating));
+        if (minRating !== "" && !isNaN(minRating))
+          qs.set("minRating", String(minRating));
+        if (maxRating !== "" && !isNaN(maxRating))
+          qs.set("maxRating", String(maxRating));
 
         const url = `${fetchUrl}?${qs.toString()}`;
         const res = await fetch(url);
@@ -103,7 +105,11 @@ export default function GenreSection({
               </button>
             );
           })}
-          <button type="button" onClick={() => setSelectedGenres([])} className="btn btn-error text-white btn-sm rounded-full font-bold ml-2">
+          <button
+            type="button"
+            onClick={() => setSelectedGenres([])}
+            className="btn btn-error text-white btn-sm rounded-full font-bold ml-2"
+          >
             Clear Genres
           </button>
         </div>
@@ -137,7 +143,11 @@ export default function GenreSection({
             />
           </label>
 
-          <button type="button" onClick={clearFilters} className="btn btn-sm btn-outline ml-2">
+          <button
+            type="button"
+            onClick={clearFilters}
+            className="btn btn-sm btn-outline ml-2"
+          >
             Reset All
           </button>
         </div>
@@ -160,10 +170,15 @@ export default function GenreSection({
                 whileInView="visible"
                 whileHover={{ scale: 1.02 }}
               >
-                <Link to={`/movies/${movie._id ?? movie.id}`} className="flex flex-col h-full">
+                <Link
+                  to={`/movies/${movie._id ?? movie.id}`}
+                  className="flex flex-col h-full"
+                >
                   <div className="h-60 overflow-hidden">
                     <img
-                      src={movie.posterUrl ?? "https://i.ibb.co/placeholder.png"}
+                      src={
+                        movie.posterUrl ?? "https://i.ibb.co/placeholder.png"
+                      }
                       alt={movie.title}
                       className="object-cover w-full h-full"
                       loading="lazy"
@@ -177,7 +192,9 @@ export default function GenreSection({
                     </div>
 
                     <div className="mt-3">
-                      <div className="text-orange-400 font-bold">⭐ {movie.rating}</div>
+                      <div className="text-orange-400 font-bold">
+                        ⭐ {movie.rating}
+                      </div>
                     </div>
                   </div>
                 </Link>

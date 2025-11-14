@@ -11,32 +11,32 @@ const MyCollection = () => {
   const navigate = useNavigate();
   const [myMovies, setMyMovies] = useState([]);
 
-useEffect(() => {
-  if (!user?.email) return;
-  const fetchMovies = async () => {
-    try {
-      const token = user.accessToken;
-      const res = await fetch(
-        `http://localhost:3000/movie/my-collection?email=${user.email}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,   
-          },
+  useEffect(() => {
+    if (!user?.email) return;
+    const fetchMovies = async () => {
+      try {
+        const token = user.accessToken;
+        const res = await fetch(
+          `https://moviemaster-server-omega.vercel.app/movie/my-collection?email=${user.email}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (!res.ok) {
+          throw new Error(`Request failed: ${res.status}`);
         }
-      );
-
-      if (!res.ok) {
-        throw new Error(`Request failed: ${res.status}`);
+        const data = await res.json();
+        setMyMovies(data);
+      } catch (err) {
+        console.error("Error:", err);
       }
-      const data = await res.json();
-      setMyMovies(data);
-    } catch (err) {
-      console.error("Error:", err);
-    }
-  };
+    };
 
-  fetchMovies();
-}, [user]);
+    fetchMovies();
+  }, [user]);
 
   const handleEdit = (movie) => {
     const id = movie._id
@@ -125,8 +125,6 @@ useEffect(() => {
                         >
                           <FaEdit />
                         </button>
-
-                        
                       </div>
                     </div>
                   </div>

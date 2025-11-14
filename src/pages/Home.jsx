@@ -1,14 +1,13 @@
-import { useEffect, useMemo, useState } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { Link, useRouteLoaderData } from "react-router";
+import { useRouteLoaderData } from "react-router";
 import HeroSection from "../components/HeroSection";
 import Container from "../components/Container";
 import RecentlyAdded from "../components/recently/RecentlyAdded";
 import TopRatedMovies from "../components/top-rated/TopRatedMovies";
 import GenreSection from "../components/genre/GenreSection";
-import { StatisticsSection } from "../components/states/StatisticsSection";
 
 
 const Home = () => {

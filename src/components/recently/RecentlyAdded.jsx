@@ -1,16 +1,14 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router";
-import Container from "../Container";
 import { AuthContext } from "../providers/AuthProvider";
 
-const RecentlyAdded = ()=> {
+const RecentlyAdded = () => {
   const [movies, setMovies] = useState([]);
-  const {setLoading}=useContext(AuthContext)
+  const { setLoading } = useContext(AuthContext);
 
   useEffect(() => {
-
-    fetch("http://localhost:3000/latest-movie")
+    fetch("https://moviemaster-server-omega.vercel.app/latest-movie")
       .then((res) => res.json())
       .then((data) => {
         setMovies(data);
@@ -20,8 +18,7 @@ const RecentlyAdded = ()=> {
         console.error("Error fetching latest movies:", err);
         setLoading(false);
       });
-  }, []); 
-
+  }, []);
 
   return (
     <section className="p-6">
@@ -54,7 +51,6 @@ const RecentlyAdded = ()=> {
       )}
     </section>
   );
-}
-
+};
 
 export default RecentlyAdded;

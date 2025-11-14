@@ -5,7 +5,7 @@ import { useNavigate } from "react-router";
 import { AuthContext } from "./providers/AuthProvider";
 
 const AddMovie = () => {
-  const {user} = useContext(AuthContext)
+  const { user } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const loggedInUser = { email: `${user.email}` };
@@ -31,43 +31,43 @@ const AddMovie = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-
   const handleSubmit = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  try {
-    const token = await user.getIdToken(); 
+    try {
+      const token = await user.getIdToken();
 
-    const res = await fetch('http://localhost:3000/movies/add', {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`, 
-      },
-      body: JSON.stringify(formData),
-    });
+      const res = await fetch(
+        "https://moviemaster-server-omega.vercel.app/movies/add",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(formData),
+        }
+      );
 
-    if (!res.ok) {
-      let errText;
-      try {
-        const errJson = await res.json();
-        errText = errJson.message || JSON.stringify(errJson);
-      } catch {
-        errText = await res.text();
+      if (!res.ok) {
+        let errText;
+        try {
+          const errJson = await res.json();
+          errText = errJson.message || JSON.stringify(errJson);
+        } catch {
+          errText = await res.text();
+        }
+        throw new Error(errText || `Request failed with status ${res.status}`);
       }
-      throw new Error(errText || `Request failed with status ${res.status}`);
+
+      const data = await res.json();
+      toast.success(`${formData.title} added successfully! 🎬`);
+      navigate("/myCollection");
+    } catch (err) {
+      console.error("Add movie failed:", err);
+      toast.error("Add movie failed: " + (err.message || "Server error"));
     }
-
-    const data = await res.json();
-    toast.success(`${formData.title} added successfully! 🎬`);
-    navigate("/myCollection");
-
-  } catch (err) {
-    console.error("Add movie failed:", err);
-    toast.error("Add movie failed: " + (err.message || "Server error"));
-  }
-};
-
+  };
 
   return (
     <div className="min-h-screen bg-base-300 flex justify-center items-center p-6 text-base-content ">

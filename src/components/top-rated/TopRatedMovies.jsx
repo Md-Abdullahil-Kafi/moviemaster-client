@@ -3,13 +3,12 @@ import { motion } from "framer-motion";
 import { Link } from "react-router";
 import { AuthContext } from "../providers/AuthProvider";
 
-const TopRatedMovies = ()=> {
+const TopRatedMovies = () => {
   const [movies, setMovies] = useState([]);
-  const {setLoading}=useContext(AuthContext)
+  const { setLoading } = useContext(AuthContext);
 
   useEffect(() => {
-
-    fetch("http://localhost:3000/topMovies")
+    fetch("https://moviemaster-server-omega.vercel.app/topMovies")
       .then((res) => res.json())
       .then((data) => {
         setMovies(data);
@@ -19,12 +18,13 @@ const TopRatedMovies = ()=> {
         console.error("Error fetching latest movies:", err);
         setLoading(false);
       });
-  }, []); 
-
+  }, []);
 
   return (
     <section className="p-6">
-      <h2 className="text-3xl font-bold mb-4 text-white">🎬 Top Rated Movies</h2>
+      <h2 className="text-3xl font-bold mb-4 text-white">
+        🎬 Top Rated Movies
+      </h2>
 
       {movies.length === 0 ? (
         <p className="text-gray-400">No movies found</p>
@@ -53,7 +53,6 @@ const TopRatedMovies = ()=> {
       )}
     </section>
   );
-}
-
+};
 
 export default TopRatedMovies;

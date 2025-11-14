@@ -11,39 +11,39 @@ import "swiper/css/pagination";
 import "swiper/css/effect-fade";
 import { AuthContext } from "./providers/AuthProvider";
 
-
-export default function HeroSection({ safeData = []}) {
+export default function HeroSection({ safeData = [] }) {
   const slides = safeData || [];
-  const {loading}= useContext(AuthContext)
+  const { loading } = useContext(AuthContext);
   const handleAddWatchList = async (movie) => {
     try {
-        const res = await fetch('http://localhost:3000/myWatchList', {
+      const res = await fetch(
+        "https://moviemaster-server-omega.vercel.app/myWatchList",
+        {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(movie),
-        });
-    
-        if (!res.ok) {
-          let errText;
-          try {
-            const errJson = await res.json();
-            errText = errJson.message || JSON.stringify(errJson);
-          } catch {
-            errText = await res.text();
-          }
-          throw new Error(errText || `Request failed with status ${res.status}`);
         }
-    
-        const data = await res.json();
-        toast.success(`${movie.title} added successfully! 🎬`);
-      } catch (err) {
-        console.error("Add movie failed:", err);
-        toast.error("Add movie failed: " + (err.message || "Server error"));
-      }
-    
+      );
 
+      if (!res.ok) {
+        let errText;
+        try {
+          const errJson = await res.json();
+          errText = errJson.message || JSON.stringify(errJson);
+        } catch {
+          errText = await res.text();
+        }
+        throw new Error(errText || `Request failed with status ${res.status}`);
+      }
+
+      const data = await res.json();
+      toast.success(`${movie.title} added successfully! 🎬`);
+    } catch (err) {
+      console.error("Add movie failed:", err);
+      toast.error("Add movie failed: " + (err.message || "Server error"));
+    }
   };
 
   return (
@@ -64,7 +64,9 @@ export default function HeroSection({ safeData = []}) {
             <div
               className="relative h-[70vh] md:h-[80vh] flex items-center"
               style={{
-                backgroundImage: `linear-gradient(180deg, rgba(5,6,7,0.45) 0%, rgba(5,6,7,0.65) 35%, rgba(5,6,7,0.85) 100%), url(${m.backdropUrl || m.posterUrl})`,
+                backgroundImage: `linear-gradient(180deg, rgba(5,6,7,0.45) 0%, rgba(5,6,7,0.65) 35%, rgba(5,6,7,0.85) 100%), url(${
+                  m.backdropUrl || m.posterUrl
+                })`,
                 backgroundSize: "cover",
                 backgroundPosition: "center",
               }}

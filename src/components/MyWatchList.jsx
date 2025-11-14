@@ -1,33 +1,34 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router';
-import { AuthContext } from './providers/AuthProvider';
-import Container from './Container';
+import React, { useContext, useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router";
+import { AuthContext } from "./providers/AuthProvider";
+import Container from "./Container";
 import { motion } from "framer-motion";
-import { FaEdit, FaPlus, FaStar } from 'react-icons/fa';
+import { FaEdit, FaPlus, FaStar } from "react-icons/fa";
 
 const MyWatchList = () => {
-
-    const { user } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
   const navigate = useNavigate();
   const [myMovies, setMyMovies] = useState([]);
 
-useEffect(() => {
-  const fetchMovies = async () => {
-    try {
-      const res = await fetch(`http://localhost:3000/myWatchList`)
+  useEffect(() => {
+    const fetchMovies = async () => {
+      try {
+        const res = await fetch(
+          `https://moviemaster-server-omega.vercel.app/myWatchList`
+        );
 
-      if (!res.ok) {
-        throw new Error(`Request failed: ${res.status}`);
+        if (!res.ok) {
+          throw new Error(`Request failed: ${res.status}`);
+        }
+        const data = await res.json();
+        setMyMovies(data);
+      } catch (err) {
+        console.error("Error:", err);
       }
-      const data = await res.json();
-      setMyMovies(data);
-    } catch (err) {
-      console.error("Error:", err);
-    }
-  };
+    };
 
-  fetchMovies();
-}, [user]);
+    fetchMovies();
+  }, [user]);
 
   const handleEdit = (movie) => {
     const id = movie._id
@@ -35,9 +36,9 @@ useEffect(() => {
       : encodeURIComponent(movie.title);
     navigate(`/updateMovie/${id}`, { state: { movie } });
   };
-    
-    return (
-        <Container>
+
+  return (
+    <Container>
       <div className="min-h-screen text-base-content py-10 px-5">
         <div className="max-w-7xl mx-auto">
           <motion.h1
@@ -111,16 +112,14 @@ useEffect(() => {
                       </Link>
 
                       <div className="flex gap-2">
-                        {
-                            user.email == movie.addedBy && <button
-                          onClick={() => handleEdit(movie)}
-                          className="btn btn-warning btn-sm flex items-center gap-1"
-                        >
-                          <FaEdit />
-                        </button>
-                        }
-
-                        
+                        {user.email == movie.addedBy && (
+                          <button
+                            onClick={() => handleEdit(movie)}
+                            className="btn btn-warning btn-sm flex items-center gap-1"
+                          >
+                            <FaEdit />
+                          </button>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -131,7 +130,7 @@ useEffect(() => {
         </div>
       </div>
     </Container>
-    );
+  );
 };
 
 export default MyWatchList;

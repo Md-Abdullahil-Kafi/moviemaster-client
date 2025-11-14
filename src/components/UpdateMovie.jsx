@@ -8,8 +8,8 @@ const UpdateMovie = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
   const movieData = state?.movie;
-  const {user} = useContext(AuthContext);
-  
+  const { user } = useContext(AuthContext);
+
   if (!movieData) {
     return (
       <div className="min-h-screen bg-base-300 text-gray-400 flex items-center justify-center">
@@ -23,54 +23,52 @@ const UpdateMovie = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handleUpdate = async (e) => {
+    e.preventDefault();
 
+    try {
+      const payload = { ...formData };
+      const id = payload._id ? String(payload._id) : null;
+      if (payload._id) delete payload._id;
 
-const handleUpdate = async (e) => {
-  e.preventDefault();
-
-  try {
-    const payload = { ...formData };
-    const id = payload._id ? String(payload._id) : null;
-    if (payload._id) delete payload._id;
-
-    if (!id) {
-      toast.error("Missing movie id");
-      return;
-    }
-
-    const token = await user.getIdToken(); 
-
-    const res = await fetch(`http://localhost:3000/movies/update/${id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`, 
-      },
-      body: JSON.stringify(payload),
-    });
-
-    if (!res.ok) {
-      let errText;
-      try {
-        const errJson = await res.json();
-        errText = errJson.message || JSON.stringify(errJson);
-      } catch {
-        errText = await res.text();
+      if (!id) {
+        toast.error("Missing movie id");
+        return;
       }
-      throw new Error(errText || `Request failed with status ${res.status}`);
+
+      const token = await user.getIdToken();
+
+      const res = await fetch(
+        `https://moviemaster-server-omega.vercel.app/movies/update/${id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(payload),
+        }
+      );
+
+      if (!res.ok) {
+        let errText;
+        try {
+          const errJson = await res.json();
+          errText = errJson.message || JSON.stringify(errJson);
+        } catch {
+          errText = await res.text();
+        }
+        throw new Error(errText || `Request failed with status ${res.status}`);
+      }
+
+      const data = await res.json();
+      toast.success(`${formData.title} updated successfully!`);
+      navigate(`/myCollection`);
+    } catch (err) {
+      console.error("Update failed:", err);
+      toast.error("Update failed: " + (err.message || "Server error"));
     }
-
-    const data = await res.json();
-    toast.success(`${formData.title} updated successfully!`);
-    navigate(`/myCollection`);
-  } catch (err) {
-    console.error("Update failed:", err);
-    toast.error("Update failed: " + (err.message || "Server error"));
-  }
-};
-
-
-
+  };
 
   return (
     <div className="min-h-screen bg-base-300 text-base-content flex justify-center items-center p-6">
