@@ -8,7 +8,6 @@ const Footer = () => {
   return (
     <footer className="bg-base-200 text-base-content mt-16">
       <div className="container mx-auto px-4 md:px-6 lg:px-8 py-12 grid grid-cols-1 md:grid-cols-3 gap-8">
-        {/* Brand / short description */}
         <div>
           <Link to="/" className="text-2xl font-bold inline-block mb-2">
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-amber-400 to-pink-500">MovieMaster Pro</span>
@@ -34,7 +33,6 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Quick links */}
         <div>
           <h4 className="font-semibold mb-3">Quick Links</h4>
           <ul className="space-y-2 text-sm text-gray-600">
@@ -45,7 +43,6 @@ const Footer = () => {
           </ul>
         </div>
 
-        {/* Contact / copyright */}
         <div>
           <h4 className="font-semibold mb-3">Contact</h4>
           <p className="text-sm text-gray-500 mb-3">Have questions? Reach out at <a href="mailto:hello@moviemasterpro.example" className="link">hello@moviemasterpro.example</a></p>

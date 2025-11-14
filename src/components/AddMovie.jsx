@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import { useContext, useState } from "react";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router";
@@ -8,7 +8,6 @@ const AddMovie = () => {
   const {user} = useContext(AuthContext)
   const navigate = useNavigate();
 
-  // Simulate logged-in user (replace with your auth data)
   const loggedInUser = { email: `${user.email}` };
 
   const [formData, setFormData] = useState({
@@ -82,7 +81,6 @@ const AddMovie = () => {
         </h1>
 
         <form onSubmit={handleSubmit} className="grid gap-4">
-          {/* Title */}
           <div>
             <label className="label font-semibold">Title</label>
             <input
@@ -95,7 +93,6 @@ const AddMovie = () => {
             />
           </div>
 
-          {/* Genre */}
           <div>
             <label className="label font-semibold">Genre</label>
             <input
@@ -108,7 +105,6 @@ const AddMovie = () => {
             />
           </div>
 
-          {/* Release Year */}
           <div>
             <label className="label font-semibold">Release Year</label>
             <input
@@ -121,7 +117,6 @@ const AddMovie = () => {
             />
           </div>
 
-          {/* Director */}
           <div>
             <label className="label font-semibold">Director</label>
             <input
@@ -133,7 +128,6 @@ const AddMovie = () => {
             />
           </div>
 
-          {/* Cast */}
           <div>
             <label className="label font-semibold">Cast</label>
             <input
@@ -145,7 +139,6 @@ const AddMovie = () => {
             />
           </div>
 
-          {/* Rating */}
           <div>
             <label className="label font-semibold">Rating</label>
             <input
@@ -160,7 +153,6 @@ const AddMovie = () => {
             />
           </div>
 
-          {/* Duration */}
           <div>
             <label className="label font-semibold">Duration (minutes)</label>
             <input
@@ -172,7 +164,6 @@ const AddMovie = () => {
             />
           </div>
 
-          {/* Plot Summary */}
           <div>
             <label className="label font-semibold">Plot Summary</label>
             <textarea
@@ -184,7 +175,6 @@ const AddMovie = () => {
             ></textarea>
           </div>
 
-          {/* Poster URL */}
           <div>
             <label className="label font-semibold">Poster URL</label>
             <input
@@ -196,7 +186,6 @@ const AddMovie = () => {
             />
           </div>
 
-          {/* Language */}
           <div>
             <label className="label font-semibold">Language</label>
             <input
@@ -208,7 +197,6 @@ const AddMovie = () => {
             />
           </div>
 
-          {/* Country */}
           <div>
             <label className="label font-semibold">Country</label>
             <input
@@ -220,7 +208,6 @@ const AddMovie = () => {
             />
           </div>
 
-          {/* Added By (Read Only) */}
           <div>
             <label className="label font-semibold">Added By</label>
             <input
@@ -232,7 +219,6 @@ const AddMovie = () => {
             />
           </div>
 
-          {/* Submit Button */}
           <div className="flex justify-center mt-6">
             <button type="submit" className="btn btn-primary w-full">
               Add Movie

@@ -37,12 +37,10 @@ const Navbar = () => {
       toast("Type something to search");
       return;
     }
-    // navigate to a search route (implement search page separately)
     navigate(`/search?q=${encodeURIComponent(q)}`);
     setMobileOpen(false);
   };
 
-  // helper for active link classes
   const activeClass = ({ isActive }) =>
     isActive ? "text-primary font-bold" : "text-base-content";
 
@@ -50,7 +48,6 @@ const Navbar = () => {
     <header className="w-full bg-base-100 shadow-sm sticky top-0 z-50">
       <nav className="container mx-auto px-4 md:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          {/* Left: logo + mobile hamburger */}
           <div className="flex items-center gap-3">
             <button
               type="button"
@@ -72,7 +69,6 @@ const Navbar = () => {
             </Link>
           </div>
 
-          {/* Center: nav links (large screens) */}
           <div className="hidden lg:flex lg:items-center lg:gap-6">
             <NavLink to="/" className={activeClass}>
               Home
@@ -87,9 +83,7 @@ const Navbar = () => {
             )}
           </div>
 
-          {/* Right: search, theme, auth */}
           <div className="flex items-center gap-3">
-            {/* Search (desktop) */}
             <form
               onSubmit={handleSearchSubmit}
               className="hidden sm:flex items-center gap-2 border rounded-lg px-2 py-1 bg-base-200"
@@ -107,16 +101,15 @@ const Navbar = () => {
               />
             </form>
 
-            {/* Theme toggle (if exists) */}
             <div className="hidden sm:flex">
               <ThemeToggle />
             </div>
 
-            {/* Auth buttons or user dropdown */}
             {!user ? (
               <div className="flex items-center gap-2">
                 <NavLink to="/login" className="btn btn-ghost gap-2">
-                  <FaSignInAlt /> <span className="hidden sm:inline">Login</span>
+                  <FaSignInAlt />{" "}
+                  <span className="hidden sm:inline">Login</span>
                 </NavLink>
                 <NavLink to="/register" className="btn btn-primary">
                   Register
@@ -124,7 +117,6 @@ const Navbar = () => {
               </div>
             ) : (
               <div className="flex items-center gap-3">
-                {/* Logout */}
                 <button
                   onClick={handleLogout}
                   className="btn btn-ghost gap-2 hidden sm:flex"
@@ -134,7 +126,6 @@ const Navbar = () => {
                   <FaSignOutAlt />
                 </button>
 
-                {/* Profile dropdown */}
                 <div className="dropdown dropdown-end">
                   <label
                     tabIndex={0}
@@ -144,7 +135,10 @@ const Navbar = () => {
                   >
                     <div className="w-10 h-10 rounded-full overflow-hidden ring ring-primary ring-offset-2">
                       <img
-                        src={user?.photoURL || "https://i.ibb.co/4pDNDk1/avatar.png"}
+                        src={
+                          user?.photoURL ||
+                          "https://i.ibb.co/4pDNDk1/avatar.png"
+                        }
                         alt={user?.displayName || "User avatar"}
                         referrerPolicy="no-referrer"
                       />
@@ -161,19 +155,30 @@ const Navbar = () => {
                       <div className="flex items-center gap-3">
                         <div className="w-12 h-12 rounded-full overflow-hidden">
                           <img
-                            src={user?.photoURL || "https://i.ibb.co/4pDNDk1/avatar.png"}
+                            src={
+                              user?.photoURL ||
+                              "https://i.ibb.co/4pDNDk1/avatar.png"
+                            }
                             alt="avatar"
                             referrerPolicy="no-referrer"
                           />
                         </div>
                         <div className="min-w-0">
-                          <p className="text-sm font-semibold truncate">{user?.displayName || "User"}</p>
-                          <p className="text-xs text-gray-500 truncate">{user?.email}</p>
+                          <p className="text-sm font-semibold truncate">
+                            {user?.displayName || "User"}
+                          </p>
+                          <p className="text-xs text-gray-500 truncate">
+                            {user?.email}
+                          </p>
                         </div>
                       </div>
                     </li>
                     <li>
-                      <Link to="/profile-settings" className="btn btn-sm btn-outline w-full" role="menuitem">
+                      <Link
+                        to="/profile-settings"
+                        className="btn btn-sm btn-outline w-full"
+                        role="menuitem"
+                      >
                         <FaUserCircle className="mr-2" /> Profile & Settings
                       </Link>
                     </li>
@@ -196,7 +201,11 @@ const Navbar = () => {
                       </button>
                     </li>
                     <li className="pt-2">
-                      <button onClick={handleLogout} className="btn btn-sm btn-error w-full" role="menuitem">
+                      <button
+                        onClick={handleLogout}
+                        className="btn btn-sm btn-error w-full"
+                        role="menuitem"
+                      >
                         <FaSignOutAlt /> Logout
                       </button>
                     </li>
@@ -207,7 +216,6 @@ const Navbar = () => {
           </div>
         </div>
 
-        {/* Mobile menu (collapsible) */}
         <div
           className={`lg:hidden mt-2 transition-all duration-200 ${
             mobileOpen ? "max-h-screen" : "max-h-0 overflow-hidden"
@@ -215,19 +223,30 @@ const Navbar = () => {
           aria-hidden={!mobileOpen}
         >
           <div className="flex flex-col gap-2 py-3">
-            <NavLink to="/" onClick={() => setMobileOpen(false)} className="px-2">
+            <NavLink
+              to="/"
+              onClick={() => setMobileOpen(false)}
+              className="px-2"
+            >
               Home
             </NavLink>
-            <NavLink to="/allMovies" onClick={() => setMobileOpen(false)} className="px-2">
+            <NavLink
+              to="/allMovies"
+              onClick={() => setMobileOpen(false)}
+              className="px-2"
+            >
               All Movies
             </NavLink>
             {user && (
-              <NavLink to="/myCollection" onClick={() => setMobileOpen(false)} className="px-2">
+              <NavLink
+                to="/myCollection"
+                onClick={() => setMobileOpen(false)}
+                className="px-2"
+              >
                 My Collection
               </NavLink>
             )}
 
-            {/* Mobile search */}
             <form onSubmit={handleSearchSubmit} className="px-2 mt-2">
               <div className="flex items-center gap-2 border rounded-lg px-2 py-1">
                 <FaSearch />
@@ -244,24 +263,36 @@ const Navbar = () => {
               </div>
             </form>
 
-            {/* Mobile auth */}
             <div className="px-2 mt-3">
               {!user ? (
                 <div className="flex gap-2">
-                  <NavLink to="/login" onClick={() => setMobileOpen(false)} className="btn btn-ghost w-full">
+                  <NavLink
+                    to="/login"
+                    onClick={() => setMobileOpen(false)}
+                    className="btn btn-ghost w-full"
+                  >
                     Login
                   </NavLink>
-                  <NavLink to="/register" onClick={() => setMobileOpen(false)} className="btn btn-primary w-full">
+                  <NavLink
+                    to="/register"
+                    onClick={() => setMobileOpen(false)}
+                    className="btn btn-primary w-full"
+                  >
                     Register
                   </NavLink>
                 </div>
               ) : (
                 <div className="space-y-2">
                   <div className="text-sm text-gray-600 px-1">
-                    <p className="font-semibold truncate">{user?.displayName}</p>
+                    <p className="font-semibold truncate">
+                      {user?.displayName}
+                    </p>
                     <p className="truncate text-xs">{user?.email}</p>
                   </div>
-                  <button onClick={handleLogout} className="btn btn-error w-full">
+                  <button
+                    onClick={handleLogout}
+                    className="btn btn-error w-full"
+                  >
                     Logout
                   </button>
                 </div>

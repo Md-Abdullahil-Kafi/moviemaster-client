@@ -19,7 +19,6 @@ const ProfileSettings = () => {
     email: "",
   });
 
-  // Initialize form when user loads / changes
   useEffect(() => {
     if (currentUser) {
       setFormData({
@@ -45,13 +44,11 @@ const ProfileSettings = () => {
 
     setLoading(true);
     try {
-      // Only update displayName and photoURL (email is read-only here)
       await updateProfile(auth.currentUser, {
         displayName: formData.name,
         photoURL: formData.photoURL,
       });
 
-      // Try to reload the current user so SDK reflects changes (if method exists)
       if (typeof auth.currentUser.reload === "function") {
         await auth.currentUser.reload();
       }

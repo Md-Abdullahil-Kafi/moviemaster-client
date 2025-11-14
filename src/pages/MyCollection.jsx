@@ -105,7 +105,6 @@ useEffect(() => {
                       {movie.genre} • {movie.releaseYear}
                     </p>
 
-                    {/* Quick Actions */}
                     <div className="flex justify-between items-center mt-3">
                       <Link
                         to={`/movies/${

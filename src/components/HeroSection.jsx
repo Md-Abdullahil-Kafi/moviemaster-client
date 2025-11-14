@@ -1,9 +1,8 @@
-// src/components/HeroSection.jsx
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Navigation, Pagination, EffectFade } from "swiper/modules";
 import { motion } from "framer-motion";
-import { Link, useNavigate } from "react-router";
+import { Link } from "react-router";
 import { toast } from "react-hot-toast";
 
 import "swiper/css";
@@ -71,7 +70,6 @@ export default function HeroSection({ safeData = []}) {
               }}
             >
               <div className="container mx-auto px-6 lg:px-12 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-                {/* Left: Text */}
                 <motion.div
                   initial={{ opacity: 0, x: -30 }}
                   animate={{ opacity: 1, x: 0 }}
@@ -107,7 +105,6 @@ export default function HeroSection({ safeData = []}) {
                   </div>
                 </motion.div>
 
-                {/* Right: Poster */}
                 <motion.div
                   initial={{ opacity: 0, scale: 0.98 }}
                   animate={{ opacity: 1, scale: 1 }}

@@ -8,6 +8,7 @@ import Container from "../components/Container";
 import RecentlyAdded from "../components/recently/RecentlyAdded";
 import TopRatedMovies from "../components/top-rated/TopRatedMovies";
 import GenreSection from "../components/genre/GenreSection";
+import { StatisticsSection } from "../components/states/StatisticsSection";
 
 
 const Home = () => {
@@ -24,7 +25,7 @@ const Home = () => {
 
    return (
     <div className="space-y-16 pb-20">
-      {/* 🎬 HERO SECTION */}
+      {/*  HERO SECTION */}
       <HeroSection safeData={safeData}></HeroSection>
 
       {/*  STATS SECTION */}
@@ -47,6 +48,7 @@ const Home = () => {
           <p className="text-gray-500">Total Users</p>
         </div>
       </motion.section>
+
 
       {/*  TOP RATED MOVIES */}
       {/* <Container>
